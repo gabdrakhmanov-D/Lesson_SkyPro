@@ -1,15 +1,15 @@
 def mask_account_card(incoming_data: str) -> str:
-    '''Функция, которая принимает номер счета или карты и возвращает строку с замаскированным номером.'''
+    """Функция, которая принимает номер счета или карты и возвращает строку с замаскированным номером."""
     import masks
+
     tmp_list = incoming_data.split()
     card_number = int(tmp_list[-1])
-    hide_number_card = []
-    if 'Счет' in tmp_list:
-        return f'{' '.join(tmp_list[0:-1])} {masks.get_mask_account(card_number)}'
+    if "Счет" in tmp_list:
+        return f"{' '.join(tmp_list[0:-1])} {masks.get_mask_account(card_number)}"
     else:
-        return f'{' '.join(tmp_list[0:-1])} {masks.get_mask_card_number(card_number)}'
+        return f"{' '.join(tmp_list[0:-1])} {masks.get_mask_card_number(card_number)}"
+
 
 def get_date(date: str) -> str:
-    '''Функция, которая изменяет формат даты'''
-    return f'{date[8:10]}.{date[5:7]}.{date[0:4]}'
-
+    """Функция, которая изменяет формат даты"""
+    return f"{date[8:10]}.{date[5:7]}.{date[0:4]}"
