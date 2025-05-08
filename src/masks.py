@@ -3,17 +3,17 @@ def get_mask_card_number(card_number: int) -> str:
 
     card_number_str = str(card_number)
     hide_number_card = []
-    i = 0
+    i =0
 
     for num in card_number_str:
 
-        if i <= 6:  # в этом условии в новый список добавляем первые 6 цифр карты
+        if i <= 5:  # в этом условии в новый список добавляем первые 6 цифр карты
             hide_number_card.append(num)
             i += 1
             if i % 4 == 0:
                 hide_number_card.append(" ")  # после 4 символов подряд вставляется пробел
 
-        elif i > 6 and ((len(card_number_str) - i) > 4):  # после шести цифр и до последних четырех вставляем звездочки
+        elif i > 5 and ((len(card_number_str) - i) > 4):  # после шести цифр и до последних четырех вставляем звездочки
             hide_number_card.append("*")
             i += 1
             if i % 4 == 0:
