@@ -3,7 +3,7 @@ def get_mask_card_number(card_number: int) -> str:
 
     card_number_str = str(card_number)
     hide_number_card = []
-    i =0
+    i = 0
 
     for num in card_number_str:
 
