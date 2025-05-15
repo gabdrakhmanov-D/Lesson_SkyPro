@@ -15,17 +15,6 @@ def sort_by_date(list_dict: list[dict[str, Union[int, str]]], sorting=True) -> l
     """Принимает список словарей и необязательный параметр, задающий порядок сортировки (по умолчанию — убывание).
     Функция возвращает новый список, отсортированный по дате."""
     from widget import get_date
-    def key_sorting(date:str) -> tuple[int, int, int]:
-        """"""
-        tmp_list = get_date(date).split('.')
-        return int(tmp_list[2]), int(tmp_list[1]), int(tmp_list[0])
+    from datetime import datetime
 
-    return sorted(list_dict, key=lambda date: key_sorting(date['date']), reverse=sorting)
-
-
-print(sort_by_date([{'id': 41428829, 'state': 'EXECUTED', 'date': '2019-07-03T18:35:29.512364'},
-                    {'id': 939719570, 'state': 'EXECUTED', 'date': '2018-06-30T02:08:58.425572'},
-                    {'id': 594226727, 'state': 'CANCELED', 'date': '2018-09-12T21:27:25.241689'},
-                    {'id': 615064591, 'state': 'CANCELED', 'date': '2018-10-14T08:21:33.419441'}]))
-# list_1 = [[11, 7, 2019], [12, 9, 2018], [10, 8, 2020], [13, 9, 2018]]
-# print(sorted(list_1, reverse=True))
+    return sorted(list_dict, key=lambda date: datetime.strptime(get_date(date['date']), '%d.%m.%Y'), reverse=sorting)
