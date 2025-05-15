@@ -7,9 +7,6 @@ def filter_by_state(
     """Принимает список словарей и опционально значение для ключа state, возвращает новый список словарей,
     содержащий только те словари, у которых ключ state соответствует указанному значению"""
     new_list = [i for i in list_dict if i["state"] == state]
-    # for i in list_dict:
-    #     if i["state"] == state:
-    #         new_list.append(i)
     return new_list
 
 
