@@ -6,8 +6,7 @@ def filter_by_state(
 ) -> list[dict[str, Union[int, str]]]:
     """Принимает список словарей и опционально значение для ключа state, возвращает новый список словарей,
     содержащий только те словари, у которых ключ state соответствует указанному значению"""
-    new_list = [i for i in list_dict if i["state"] == state]
-    return new_list
+    return [i for i in list_dict if i["state"] == state]
 
 
 def sort_by_date(
