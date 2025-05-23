@@ -34,5 +34,7 @@ def get_mask_card_number(card_number: int) -> str:
 
 def get_mask_account(account_number: int) -> str:
     """Принимает на вход номер счета и возвращает его маску."""
-    return f'**{str(account_number)[-4:]}'
-
+    if account_number:
+        return f'**{str(account_number)[-4:]}'
+    else:
+        return ''
