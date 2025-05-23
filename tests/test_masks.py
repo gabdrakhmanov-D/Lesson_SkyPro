@@ -6,16 +6,22 @@ import pytest
                                                    (1234567890, '1234 5678 90'),
                                                    (123456789012345678, '1234 56** **** **56 78'),
                                                    (12345678901234567890, '1234 56** **** **** 7890')])
-
 def test_mask_card(card_number, expected):
     assert get_mask_card_number(card_number) == expected
+
+
 def test_mask_card_empty_number():
     with pytest.raises(TypeError):
         get_mask_card_number()
 
+
 @pytest.mark.parametrize('account_number, expected', [(73654108430135874305, '**4305'),
                                                       (123456, '**3456'),
-                                                      (None, '')])
-
+                                                      (456, '**456')])
 def test_mask_account(account_number, expected):
     assert get_mask_account(account_number) == expected
+
+
+def test_mask_account_empty_number():
+    with pytest.raises(TypeError):
+        get_mask_account()

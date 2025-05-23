@@ -37,4 +37,4 @@ def get_mask_account(account_number: int) -> str:
     if account_number:
         return f'**{str(account_number)[-4:]}'
     else:
-        return ''
+        raise TypeError("Номер счета не может быть пустым")
