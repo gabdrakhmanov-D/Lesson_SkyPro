@@ -30,7 +30,7 @@ def get_mask_card_number(card_number: int) -> str:
         return "".join(hide_number_card)
 
     else:
-        return ""
+        raise TypeError("Номер карты не может быть пустым")
 
 def get_mask_account(account_number: int) -> str:
     """Принимает на вход номер счета и возвращает его маску."""
