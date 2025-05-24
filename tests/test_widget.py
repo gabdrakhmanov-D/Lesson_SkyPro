@@ -10,3 +10,10 @@ from src.widget import mask_account_card
                          )
 def test_mask_account_card(incoming_data,expected):
     assert mask_account_card(incoming_data) == expected
+
+
+@pytest.mark.parametrize('incoming_data', [None, 12345657, ['Счет', '132456465454']])
+def test_mask_account_wrong_data(incoming_data):
+    with pytest.raises(TypeError):
+        mask_account_card(incoming_data)
+
