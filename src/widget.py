@@ -1,6 +1,8 @@
+
+
 def mask_account_card(incoming_data: str) -> str:
     """Функция, которая принимает номер счета или карты и возвращает строку с замаскированным номером."""
-    import masks
+    from src import masks
 
     tmp_list = incoming_data.split()
     card_number = int(tmp_list[-1])
