@@ -1,3 +1,5 @@
+from argparse import ArgumentError
+
 import pytest
 
 from src.widget import mask_account_card
@@ -11,9 +13,20 @@ from src.widget import mask_account_card
 def test_mask_account_card(incoming_data,expected):
     assert mask_account_card(incoming_data) == expected
 
+def test_mask_account_card_empty():
+    """Тест если не пришли никакие данные"""
+    with pytest.raises(TypeError) as exc_info:
+        mask_account_card()
+    assert str(exc_info.value) == "Номер счета или карты не может состоять из пустой строки!"
 
-@pytest.mark.parametrize('incoming_data', [None, 12345657, ['Счет', '132456465454']])
+@pytest.mark.parametrize('incoming_data', [12345657, ['Счет', '132456465454']])
 def test_mask_account_wrong_data(incoming_data):
+    """Тестирует функцию если введен неверный тип данных"""
     with pytest.raises(TypeError):
         mask_account_card(incoming_data)
 
+@pytest.mark.parametrize('incoming_data', ['0007922 89606361', 'Maestro', 'Счет', 'Счет73654108430135874305'])
+def test_mask_account_card_missing_data(incoming_data):
+    with pytest.raises(ValueError) as exc_info:
+        mask_account_card(incoming_data)
+    assert str(exc_info.value) == 'Некорректный номер карты или счета'
