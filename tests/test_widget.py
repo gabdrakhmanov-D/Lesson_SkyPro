@@ -1,8 +1,6 @@
-from argparse import ArgumentError
-
 import pytest
 
-from src.widget import mask_account_card
+from src.widget import mask_account_card, get_date
 
 
 @pytest.mark.parametrize('incoming_data, expected', [('Visa Platinum 7000792289606361', 'Visa Platinum 7000 79** **** 6361'),
@@ -30,3 +28,10 @@ def test_mask_account_card_missing_data(incoming_data):
     with pytest.raises(ValueError) as exc_info:
         mask_account_card(incoming_data)
     assert str(exc_info.value) == 'Некорректный номер карты или счета'
+
+#Тест функции get_date()
+@pytest.mark.parametrize('date, expected',[("2024-03-11T02:26:18.671407", "11.03.2024"),
+                                           ("2025-04-12T02:26:18.671407", "12.04.2025"),
+                                           ("2023-12-01T02:26:18.671407", "01.12.2023")])
+def test_get_date(date,expected):
+    assert get_date(date) == expected
