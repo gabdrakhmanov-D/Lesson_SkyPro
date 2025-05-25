@@ -17,6 +17,9 @@ def mask_account_card(incoming_data: str = None) -> str:
     else:
         raise TypeError('Номер счета или карты может состоять только из строки!')
 
-def get_date(date: str) -> str:
+def get_date(date: str = None) -> str:
     """Функция, которая изменяет формат даты"""
-    return f"{date[8:10]}.{date[5:7]}.{date[0:4]}"
+    if date:
+        return f"{date[8:10]}.{date[5:7]}.{date[0:4]}"
+    else:
+        raise ValueError('Дата не может быть пустой')
