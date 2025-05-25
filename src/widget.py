@@ -1,4 +1,4 @@
-from argparse import ArgumentError
+import re
 
 
 def mask_account_card(incoming_data: str = None) -> str:
@@ -20,6 +20,10 @@ def mask_account_card(incoming_data: str = None) -> str:
 def get_date(date: str = None) -> str:
     """Функция, которая изменяет формат даты"""
     if date:
-        return f"{date[8:10]}.{date[5:7]}.{date[0:4]}"
+        match = re.match(r'\d{4}-\d{2}-\d{2}',date) # шаблон для проверки даты по формату гг.мм.дд
+        if match:
+            return f'{match.group()[-2:]}.{match.group()[5:7]}.{match.group()[0:4]}'
+        else:
+            raise ValueError('Неверный формат даты')
     else:
         raise ValueError('Дата не может быть пустой')
