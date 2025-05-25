@@ -35,3 +35,8 @@ def test_mask_account_card_missing_data(incoming_data):
                                            ("2023-12-01T02:26:18.671407", "01.12.2023")])
 def test_get_date(date,expected):
     assert get_date(date) == expected
+
+def test_get_date_empty_date():
+    with pytest.raises(ValueError) as exc_info:
+        get_date()
+    assert str(exc_info.value) == "Дата не может быть пустой"
