@@ -16,7 +16,7 @@ def sort_by_date(
     Функция возвращает новый список, отсортированный по дате."""
     from datetime import datetime
 
-    from widget import get_date
+    from src.widget import get_date
 
     return sorted(
         list_dict,
