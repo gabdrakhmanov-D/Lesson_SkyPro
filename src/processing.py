@@ -20,6 +20,6 @@ def sort_by_date(
 
     return sorted(
         list_dict,
-        key=lambda date: datetime.strptime(get_date(date["date"]), "%d.%m.%Y"),
+        key=lambda date: datetime.fromisoformat(date["date"]),
         reverse=sorting,
     )
