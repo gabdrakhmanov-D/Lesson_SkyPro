@@ -1,4 +1,4 @@
-def get_mask_card_number(card_number: int) -> str:
+def get_mask_card_number(card_number: int = None) -> str:
     """Принимает на вход номер карты и возвращает ее маску."""
     if card_number:
         card_number_str = str(card_number)
@@ -11,9 +11,13 @@ def get_mask_card_number(card_number: int) -> str:
                 hide_number_card.append(num)
                 i += 1
                 if i % 4 == 0:
-                    hide_number_card.append(" ")  # после 4 символов подряд вставляется пробел
+                    hide_number_card.append(
+                        " "
+                    )  # после 4 символов подряд вставляется пробел
 
-            elif i > 5 and ((len(card_number_str) - i) > 4):  # после шести цифр и до последних четырех вставляем звездочки
+            elif i > 5 and (
+                (len(card_number_str) - i) > 4
+            ):  # после шести цифр и до последних четырех вставляем звездочки
                 hide_number_card.append("*")
                 i += 1
                 if i % 4 == 0:
@@ -25,16 +29,17 @@ def get_mask_card_number(card_number: int) -> str:
                 if i % 4 == 0:
                     hide_number_card.append(" ")
 
-        if hide_number_card[-1] == ' ':
+        if hide_number_card[-1] == " ":
             del hide_number_card[-1]
         return "".join(hide_number_card)
 
     else:
-        raise TypeError("Номер карты не может быть пустым")
+        raise ValueError("Номер карты не может быть пустым")
 
-def get_mask_account(account_number: int) -> str:
+
+def get_mask_account(account_number: int = None) -> str:
     """Принимает на вход номер счета и возвращает его маску."""
     if account_number:
-        return f'**{str(account_number)[-4:]}'
+        return f"**{str(account_number)[-4:]}"
     else:
-        raise TypeError("Номер счета не может быть пустым")
+        raise ValueError("Номер счета не может быть пустым")

@@ -27,3 +27,5 @@ black = "^25.1.0"
 pytest = "^8.3.5"
 pytest-cov = "^6.1.1"
 
+[tool.mypy]
+no_implicit_optional = false
