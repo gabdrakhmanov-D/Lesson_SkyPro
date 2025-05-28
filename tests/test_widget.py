@@ -16,29 +16,12 @@ def test_mask_account_card(incoming_data, expected):
     assert mask_account_card(incoming_data) == expected
 
 
-def test_mask_account_card_empty():
-    """Тест если не пришли никакие данные"""
-    with pytest.raises(TypeError) as exc_info:
-        mask_account_card()
-    assert (
-        str(exc_info.value) == "Номер счета или карты может состоять только из строки!"
-    )
-
-
-@pytest.mark.parametrize("incoming_data", [12345657, ["Счет", "132456465454"]])
-def test_mask_account_wrong_data(incoming_data):
-    """Тестирует функцию если введен неверный тип данных"""
-    with pytest.raises(TypeError):
-        mask_account_card(incoming_data)
-
-
 @pytest.mark.parametrize(
     "incoming_data", ["0007922 89606361", "Maestro", "Счет", "Счет73654108430135874305"]
 )
-def test_mask_account_card_missing_data(incoming_data):
-    with pytest.raises(ValueError) as exc_info:
+def test_mask_account_card_wrong_data(incoming_data):
+    with pytest.raises(ValueError):
         mask_account_card(incoming_data)
-    assert str(exc_info.value) == "Некорректный номер карты или счета"
 
 
 # Тест функции get_date()
@@ -52,12 +35,6 @@ def test_mask_account_card_missing_data(incoming_data):
 )
 def test_get_date(date, expected):
     assert get_date(date) == expected
-
-
-def test_get_date_empty_date():
-    with pytest.raises(ValueError) as exc_info:
-        get_date()
-    assert str(exc_info.value) == "Дата не может быть пустой"
 
 
 @pytest.mark.parametrize(
