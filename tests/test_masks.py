@@ -13,6 +13,7 @@ from src.masks import get_mask_account, get_mask_card_number
 def test_mask_card(card_number, expected):
     assert get_mask_card_number(card_number) == expected
 
+
 @pytest.mark.parametrize("card_number", ["123456789012345", "1245", "card number"])
 def test_mask_card_wrong_number(card_number):
     with pytest.raises(ValueError):
