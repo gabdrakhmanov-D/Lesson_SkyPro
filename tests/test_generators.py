@@ -1,4 +1,4 @@
-from src.generators import filter_by_currency, transaction_descriptions
+from src.generators import filter_by_currency, transaction_descriptions, card_number_generator
 
 
 def test_filter_by_currency(examples_for_generators):
@@ -59,3 +59,13 @@ def test_transaction_descriptions(examples_for_generators):
     assert next(generator) == 'Перевод со счета на счет'
     assert next(generator) == 'Перевод с карты на карту'
     assert next(generator) == 'Перевод организации'
+
+def test_card_number_generator():
+    generator_1_2 = card_number_generator(1, 2)
+    assert next(generator_1_2) == '0000 0000 0000 0001'
+    assert next(generator_1_2) == '0000 0000 0000 0002'
+def test_card_number_generator_end_of_range():
+    generator_end_of_range = card_number_generator(9999999999999997, 9999999999999999)
+    assert next(generator_end_of_range) == '9999 9999 9999 9997'
+    assert next(generator_end_of_range) == '9999 9999 9999 9998'
+    assert next(generator_end_of_range) == '9999 9999 9999 9999'
