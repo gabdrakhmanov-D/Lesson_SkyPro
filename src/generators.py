@@ -5,3 +5,9 @@ def filter_by_currency(list_transact: list[dict[str, int | str]], currency) -> G
     dict[str, int | str], Any, None]:
     """Функция возвращает итератор, который поочередно выдает транзакции, где валюта операции соответствует заданной (например, USD)."""
     return (dict_in_list_transact for dict_in_list_transact in list_transact if dict_in_list_transact["operationAmount"]["currency"]["code"] == currency)
+
+
+def transaction_descriptions(list_transact: list[dict[str, int | str]]):
+    for dict_in_list_transact in list_transact:
+        yield dict_in_list_transact["description"]
+

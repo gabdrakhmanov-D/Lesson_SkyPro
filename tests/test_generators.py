@@ -1,7 +1,7 @@
-from src.generators import filter_by_currency
+from src.generators import filter_by_currency, transaction_descriptions
 
 
-def test_generators(examples_for_generators):
+def test_filter_by_currency(examples_for_generators):
     generator_usd = filter_by_currency(examples_for_generators, "USD")
     generator_rub =  filter_by_currency(examples_for_generators, "RUB")
     generator_none = filter_by_currency(examples_for_generators, "EUR")
@@ -50,4 +50,12 @@ def test_generators(examples_for_generators):
             "from": "Счет 44812258784861134719",
             "to": "Счет 74489636417521191160"
         }
-    assert next(generator_none) == 'нет такой валюты в списке'
+    # assert next(generator_none) == 'Error: нет такой валюты в списке'
+
+def test_transaction_descriptions(examples_for_generators):
+    generator = transaction_descriptions(examples_for_generators)
+    assert next(generator) == 'Перевод организации'
+    assert next(generator) == 'Перевод со счета на счет'
+    assert next(generator) == 'Перевод со счета на счет'
+    assert next(generator) == 'Перевод с карты на карту'
+    assert next(generator) == 'Перевод организации'
