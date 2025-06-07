@@ -101,6 +101,10 @@ def test_transaction_descriptions(examples_for_generators, expected):
     generator = transaction_descriptions(examples_for_generators)
     assert next(generator), next(generator) == expected
 
+def test_transaction_descriptions_empty_list():
+    generator = list(transaction_descriptions([]))
+    assert generator == []
+
 
 @pytest.mark.parametrize(
     "start_number, end_number, expected",
