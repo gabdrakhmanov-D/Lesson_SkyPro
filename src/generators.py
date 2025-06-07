@@ -15,15 +15,15 @@ def transaction_descriptions(list_transact: list[dict[str, int | str]]):
 
 def card_number_generator(start_number: int, end_number: int) -> Generator[str, Any, None]:
     """Генерирует номера банковских карт в формате XXXX XXXX XXXX XXXX, где X — цифра номера карты."""
-    empty_list = ['0']*16
+    bank_card_number = ['0']*16
 
     if end_number >= start_number:
         number_of_digits = end_number-start_number + 1
     else:
         number_of_digits = start_number - end_number + 1
 
-    for x in range(number_of_digits):
-        for i in range(-len(str(start_number)),0):
-            empty_list[i] = str(start_number)[i]
-        yield f'{''.join(empty_list[0:4])} {''.join(empty_list[4:8])} {''.join(empty_list[8:12])} {''.join(empty_list[12:])}'
+    for number in range(number_of_digits):
+        for digit_index in range(-len(str(start_number)),0):
+            bank_card_number[digit_index] = str(start_number)[digit_index]
+        yield f'{''.join(bank_card_number[0:4])} {''.join(bank_card_number[4:8])} {''.join(bank_card_number[8:12])} {''.join(bank_card_number[12:])}'
         start_number += 1
