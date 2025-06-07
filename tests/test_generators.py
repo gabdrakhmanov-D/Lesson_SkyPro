@@ -3,8 +3,9 @@ from src.generators import filter_by_currency, transaction_descriptions, card_nu
 
 def test_filter_by_currency(examples_for_generators):
     generator_usd = filter_by_currency(examples_for_generators, "USD")
-    generator_rub =  filter_by_currency(examples_for_generators, "RUB")
-    generator_none = filter_by_currency(examples_for_generators, "EUR")
+    generator_rub = filter_by_currency(examples_for_generators, "RUB")
+    generator_eur = filter_by_currency(examples_for_generators, "EUR")
+    generator_empty_list = filter_by_currency([], "USD")
     assert  next(generator_usd)== {
           "id": 939719570,
           "state": "EXECUTED",
@@ -50,7 +51,10 @@ def test_filter_by_currency(examples_for_generators):
             "from": "Счет 44812258784861134719",
             "to": "Счет 74489636417521191160"
         }
-    # assert next(generator_none) == 'Error: нет такой валюты в списке'
+    assert list(generator_eur) == []
+
+    assert list(generator_empty_list) == []
+
 
 def test_transaction_descriptions(examples_for_generators):
     generator = transaction_descriptions(examples_for_generators)
