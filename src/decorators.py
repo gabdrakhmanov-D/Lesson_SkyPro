@@ -27,7 +27,8 @@ def log(filename = None):
                                    f'{f', {kw_argument_func}' if kw_argument_func else ''}.\nНачало выполнения функции: {start_time}.\nВремя ошибки {end_time}.\nСообщение ошибки: {e}')
                     return None
                 else:
-                    return (f'В функции {function_name} произошла ошибка.\nВходные аргументы:{argument_func if argument_func else ''}'
+                    print(f'В функции {function_name} произошла ошибка.\nВходные аргументы:{argument_func if argument_func else ''}'
                             f'{f', {kw_argument_func}' if kw_argument_func else ''}.\nНачало выполнения функции: {start_time}.\nВремя ошибки {end_time}.\nСообщение ошибки: {e}')
+                    return None
         return wrapper
     return decorator
