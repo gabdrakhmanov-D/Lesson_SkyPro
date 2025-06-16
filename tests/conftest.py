@@ -40,6 +40,7 @@ def dict_wrong_date_format():
         {"id": 615064591, "state": "CANCELED", "date": ""},
     ]
 
+
 @pytest.fixture
 def examples_for_generators():
     return [
