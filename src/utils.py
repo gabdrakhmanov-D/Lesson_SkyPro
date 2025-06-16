@@ -7,7 +7,7 @@ def get_dict_transactions(path_to_file: str) -> list:
     try:
         with open(path_to_file, "r", encoding='utf-8') as file:
             data = json.load(file)
-            if type(data) != list:
+            if type(data) is not list:
                 return []
         return data
     except Exception:
