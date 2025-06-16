@@ -1,6 +1,11 @@
-import requests
+import os
 
-API_KEY = 'a3472b28d030be6a04930b3d75d0cf34'
+import requests
+from dotenv import load_dotenv
+
+load_dotenv()
+API_KEY = os.getenv('API_KEY')
+
 def get_transaction_amount(transaction: dict) -> float:
     """Принимает на вход транзакцию и возвращает сумму транзакции (amount) в рублях, тип данных — float.
        Если транзакция была в USD или EUR, происходит обращение к внешнему API для получения текущего курса валют
