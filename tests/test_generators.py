@@ -1,10 +1,7 @@
 import pytest
 
-from src.generators import (
-    filter_by_currency,
-    transaction_descriptions,
-    card_number_generator,
-)
+from src.generators import (card_number_generator, filter_by_currency,
+                            transaction_descriptions)
 
 
 @pytest.mark.parametrize(
@@ -100,6 +97,7 @@ def test_filter_by_currency_eur_and_empty_list(
 def test_transaction_descriptions(examples_for_generators, expected):
     generator = transaction_descriptions(examples_for_generators)
     assert next(generator), next(generator) == expected
+
 
 def test_transaction_descriptions_empty_list():
     generator = list(transaction_descriptions([]))

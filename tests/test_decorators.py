@@ -26,10 +26,10 @@ def test_log_error(capsys):
 
 def test_log_write_to_file(tmp_path):
     os.chdir(tmp_path)
+
     @log('test')
     def test_func(a, b):
         return a / b
-
 
     test_func(5, 5)
     file = open('test.txt', 'r', encoding='utf-8')
@@ -49,5 +49,5 @@ def test_log_write_to_file_error(tmp_path):
         result = file.read()
 
     assert result == (f'В функции test_func произошла ошибка.\n'
-                            f'Входные аргументы:(5, 0).\n'
-                            f'Сообщение ошибки: division by zero')
+                      f'Входные аргументы:(5, 0).\n'
+                      f'Сообщение ошибки: division by zero')
