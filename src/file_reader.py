@@ -1,17 +1,17 @@
 import pandas as pd
-import csv
+
 
 def csv_file_reader(path_to_file: str) -> list:
-    with open(path_to_file, encoding='utf-8') as file:
-        csv_data = csv.DictReader(file, delimiter=';')
-        list_transactions = []
-        for row in csv_data:
-            list_transactions.append(row)
-        return list_transactions
+    """Функция для считывания финансовых операций из CSV, принимает путь к файлу CSV в качестве аргумента.
+    Возвращает список словарей с транзакциями."""
 
-def excel_file_reader():
-    pass
+    csv_df = pd.read_csv(path_to_file, delimiter=';')
+    return csv_df.to_dict('records')
 
-if __name__ == '__main__':
-    a=csv_file_reader('../data/transactions.csv')
-    print(a)
+
+def excel_file_reader(path_to_file: str) -> list:
+    """Функция для считывания финансовых операций из Excel, принимает путь к файлу Excel в качестве аргумента.
+    Возвращает список словарей с транзакциями."""
+
+    excel_df = pd.read_excel(path_to_file)
+    return excel_df.to_dict('records')
