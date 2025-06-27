@@ -11,6 +11,7 @@ def csv_file_reader(path_to_file: str) -> list:
     except Exception:
         return []
 
+
 def excel_file_reader(path_to_file: str) -> list:
     """Функция для считывания финансовых операций из Excel, принимает путь к файлу Excel в качестве аргумента.
     Возвращает список словарей с транзакциями."""

@@ -17,22 +17,25 @@ def test_log_error(capsys):
     @log()
     def test_func(a, b):
         return a / b
+
     test_func(5, 0)
     captured = capsys.readouterr()
-    assert captured.out == (f'В функции test_func произошла ошибка.\n'
-                            f'Входные аргументы:(5, 0).\n'
-                            f'Сообщение ошибки: division by zero\n')
+    assert captured.out == (
+        f"В функции test_func произошла ошибка.\n"
+        f"Входные аргументы:(5, 0).\n"
+        f"Сообщение ошибки: division by zero\n"
+    )
 
 
 def test_log_write_to_file(tmp_path):
     os.chdir(tmp_path)
 
-    @log('test')
+    @log("test")
     def test_func(a, b):
         return a / b
 
     test_func(5, 5)
-    file = open('test.txt', 'r', encoding='utf-8')
+    file = open("test.txt", "r", encoding="utf-8")
     result = file.read()
     assert result == "test_func -- 1.0"
 
@@ -40,14 +43,16 @@ def test_log_write_to_file(tmp_path):
 def test_log_write_to_file_error(tmp_path):
     os.chdir(tmp_path)
 
-    @log('test')
+    @log("test")
     def test_func(a, b):
         return a / b
 
     test_func(5, 0)
-    with open('test.txt', 'r', encoding='utf-8') as file:
+    with open("test.txt", "r", encoding="utf-8") as file:
         result = file.read()
 
-    assert result == (f'В функции test_func произошла ошибка.\n'
-                      f'Входные аргументы:(5, 0).\n'
-                      f'Сообщение ошибки: division by zero')
+    assert result == (
+        f"В функции test_func произошла ошибка.\n"
+        f"Входные аргументы:(5, 0).\n"
+        f"Сообщение ошибки: division by zero"
+    )

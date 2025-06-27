@@ -25,13 +25,16 @@ def test_mask_card_wrong_number(card_number):
     [
         ("73654108430135874305", "**4305"),
         ("73654108430135871111", "**1111"),
-        ("73654108430135807777", "**7777")],
+        ("73654108430135807777", "**7777"),
+    ],
 )
 def test_mask_account(account_number, expected):
     assert get_mask_account(account_number) == expected
 
 
-@pytest.mark.parametrize("account_number", ["736541084301", "9876543210", "account_number"])
+@pytest.mark.parametrize(
+    "account_number", ["736541084301", "9876543210", "account_number"]
+)
 def test_mask_account_empty_number(account_number):
     with pytest.raises(ValueError):
         get_mask_account(account_number)
