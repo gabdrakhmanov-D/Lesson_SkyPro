@@ -58,3 +58,9 @@ def test_get_required_dictionary_wrong_dict():
 def test_get_required_dictionary_no_key(list_dict, expected):
     """Тестирование случая, когда в каком то из словарей нет ключа 'description'"""
     assert get_required_dictionary(list_dict, "Перевод организации") == expected
+
+# Тестирование для category_counter
+@pytest.mark.parametrize("category", [["Перевод организации", "Перевод со счета на счет"]])
+def test_category_counter(category, examples_for_generators):
+    """Тестирование успешного поиска транзакций"""
+    assert category_counter(examples_for_generators, category) == {"Перевод организации": 2, "Перевод со счета на счет": 2}
