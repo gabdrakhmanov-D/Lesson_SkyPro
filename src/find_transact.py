@@ -12,6 +12,9 @@ get_dict_logger = logging.getLogger('get_req_dict')
 
 
 def get_required_dictionary(list_of_dict: list[dict], pattern: str) -> list[dict]:
+    """Принимает список словарей с данными о банковских операциях и строку поиска.
+    Возвращает список словарей, у которых в описании есть данная строка"""
+
     if type(pattern) is not str:
         get_dict_logger.error(f'Искомое значение не строка! Возврат пустого списка')
         return []
