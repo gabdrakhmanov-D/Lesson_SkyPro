@@ -15,3 +15,7 @@ def test_get_required_dictionary_wrong_pattern(examples_for_generators, pattern)
     assert get_required_dictionary(examples_for_generators, pattern) == []
 
 
+def test_get_required_dictionary_wrong_dict():
+    """Тестирование случая передачи пустого списка для поиска"""
+    assert get_required_dictionary([], "Перевод организации") == []
+
