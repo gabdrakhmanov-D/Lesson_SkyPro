@@ -1,9 +1,6 @@
+import logging
 import re
 from collections import Counter
-
-from src.utils import get_dict_transactions
-
-import logging
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -39,9 +36,6 @@ def get_required_dictionary(list_of_dict: list[dict], pattern: str) -> list[dict
     get_dict_logger.error('Получен пустой список. Возврат пустого списка')
     return []
 
-# Напишите функцию, которая будет принимать список словарей с данными о
-# банковских операциях и список категорий операций, а возвращать словарь,
-# в котором ключи — это названия категорий, а значения — это количество операций в каждой категории.
 
 def category_counter(list_of_dict: list[dict], list_of_category: list) -> dict:
     """Принимает список словарей с данными о банковских операциях и список категорий операций.
@@ -66,11 +60,3 @@ def category_counter(list_of_dict: list[dict], list_of_category: list) -> dict:
         return counted
     cat_count_logger.error('Получен пустой список. Возврат пустого словаря')
     return {}
-
-if __name__ == '__main__':
-
-    a= category_counter(get_dict_transactions('../data/operations.json')[:50], ["Перевод организации", "Перевод с карты на счет"] )
-    # print(len(a))
-    print(a)
-    # for i in a:
-    #     print(i)
