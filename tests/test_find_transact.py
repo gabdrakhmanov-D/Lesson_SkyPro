@@ -62,12 +62,17 @@ def test_get_required_dictionary_no_key(list_dict, expected):
 # Тестирование для category_counter
 @pytest.mark.parametrize("category", [["Перевод организации", "Перевод со счета на счет"]])
 def test_category_counter(category, examples_for_generators):
-    """Тестирование успешного поиска транзакций"""
+    """Тестирование успешного подсчета категорий"""
     assert category_counter(examples_for_generators, category) == {"Перевод организации": 2,
                                                                    "Перевод со счета на счет": 2}
 
 
 @pytest.mark.parametrize("category", ["Перевод организации", "Перевод со счета на счет"])
-def test_get_category_counter_wrong_category(examples_for_generators, category):
-    """Тестирование некорректного ввода значения поиска"""
+def test_category_counter_wrong_category(examples_for_generators, category):
+    """Тестирование некорректного ввода значения категорий"""
     assert category_counter(examples_for_generators, category) == {}
+
+
+def test_category_counter_wrong_dict():
+    """Тестирование случая передачи пустого списка для поиска категорий"""
+    assert category_counter([], ["Перевод организации", "Перевод со счета на счет"]) == {}
