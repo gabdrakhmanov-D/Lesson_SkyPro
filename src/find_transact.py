@@ -1,4 +1,6 @@
 import re
+from collections import Counter
+
 from src.utils import get_dict_transactions
 
 import logging
@@ -9,6 +11,7 @@ logging.basicConfig(level=logging.DEBUG,
                     filemode='w',
                     encoding='utf-8')
 get_dict_logger = logging.getLogger('get_req_dict')
+cat_count_logger = logging.getLogger('category_counter')
 
 
 def get_required_dictionary(list_of_dict: list[dict], pattern: str) -> list[dict]:
@@ -44,12 +47,21 @@ def category_counter(list_of_dict: list[dict], list_of_category: list) -> dict:
     """Принимает список словарей с данными о банковских операциях и список категорий операций.
        Возвращает словарь, в котором ключи — это названия категорий,
        а значения — это количество операций в каждой категории."""
-    return {}
+    count_list = []
+    for dict_transact in list_of_dict:
+        try:
+            if dict_transact.get("description") in list_of_category:
+                count_list.append(dict_transact.get("description"))
+        except Exception as ex:
+            get_dict_logger.error(f'Ошибка в ключе поиска: {ex}')
+            continue
+    counted = Counter(count_list)
+    return counted
 
 if __name__ == '__main__':
 
-    a= category_counter(get_dict_transactions('../data/operations.json'), ["Перевод организации", "Перевод с карты на счет"] )
+    a= category_counter(get_dict_transactions('../data/operations.json')[:50], ["Перевод организации", "Перевод с карты на счет"] )
     # print(len(a))
-    # print(a)
-    for i in a:
-        print(i)
+    print(a)
+    # for i in a:
+    #     print(i)
