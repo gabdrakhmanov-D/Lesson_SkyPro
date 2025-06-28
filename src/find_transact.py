@@ -36,6 +36,12 @@ def get_required_dictionary(list_of_dict: list[dict], pattern: str) -> list[dict
     get_dict_logger.error(f'Получен пустой список. Возврат пустого списка')
     return []
 
+# Напишите функцию, которая будет принимать список словарей с данными о
+# банковских операциях и список категорий операций, а возвращать словарь,
+# в котором ключи — это названия категорий, а значения — это количество операций в каждой категории.
+
+def category_counter(list_of_dict: list[dict], list_of_category: list) -> dict:
+    pass
 
 if __name__ == '__main__':
 
