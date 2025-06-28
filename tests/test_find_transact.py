@@ -19,3 +19,42 @@ def test_get_required_dictionary_wrong_dict():
     """Тестирование случая передачи пустого списка для поиска"""
     assert get_required_dictionary([], "Перевод организации") == []
 
+@pytest.mark.parametrize("list_dict, expected", [(
+        [
+            {
+                "id": 939719570,
+                "state": "EXECUTED",
+                "date": "2018-06-30T02:08:58.425572",
+                "from": "Счет 75106830613657916952",
+                "to": "Счет 11776614605963066702",
+            },
+            {
+                "id": 939719570,
+                "state": "EXECUTED",
+                "date": "2018-06-30T02:08:58.425572",
+                "operationAmount": {
+                    "amount": "9824.07",
+                    "currency": {"name": "USD", "code": "USD"},
+                },
+                "description": "Перевод организации",
+                "from": "Счет 75106830613657916952",
+                "to": "Счет 11776614605963066702",
+            }
+        ],
+        [
+            {
+                "id": 939719570,
+                "state": "EXECUTED",
+                "date": "2018-06-30T02:08:58.425572",
+                "operationAmount": {
+                    "amount": "9824.07",
+                    "currency": {"name": "USD", "code": "USD"},
+                },
+                "description": "Перевод организации",
+                "from": "Счет 75106830613657916952",
+                "to": "Счет 11776614605963066702",
+            }
+        ])])
+def test_get_required_dictionary_no_key(list_dict, expected):
+    """Тестирование случая, когда в каком то из словарей нет ключа 'description'"""
+    assert get_required_dictionary(list_dict, "Перевод организации") == expected
