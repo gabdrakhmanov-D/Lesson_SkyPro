@@ -41,12 +41,15 @@ def get_required_dictionary(list_of_dict: list[dict], pattern: str) -> list[dict
 # в котором ключи — это названия категорий, а значения — это количество операций в каждой категории.
 
 def category_counter(list_of_dict: list[dict], list_of_category: list) -> dict:
-    pass
+    """Принимает список словарей с данными о банковских операциях и список категорий операций.
+       Возвращает словарь, в котором ключи — это названия категорий,
+       а значения — это количество операций в каждой категории."""
+    return {}
 
 if __name__ == '__main__':
 
-    a= get_required_dictionary(get_dict_transactions('../data/operations.json'), 'переводa' )
-    print(len(a))
+    a= category_counter(get_dict_transactions('../data/operations.json'), ["Перевод организации", "Перевод с карты на счет"] )
+    # print(len(a))
     # print(a)
     for i in a:
         print(i)
