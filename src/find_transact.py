@@ -4,7 +4,7 @@ from collections import Counter
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    filename='../logs/find_transact.log',
+                    filename='./logs/find_transact.log',
                     filemode='w',
                     encoding='utf-8')
 get_dict_logger = logging.getLogger('get_req_dict')

@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def csv_file_reader(path_to_file: str) -> list:
+def csv_file_reader(path_to_file: str = './data/transactions.csv') -> list:
     """Функция для считывания финансовых операций из CSV, принимает путь к файлу CSV в качестве аргумента.
     Возвращает список словарей с транзакциями."""
 
@@ -12,7 +12,7 @@ def csv_file_reader(path_to_file: str) -> list:
         return []
 
 
-def excel_file_reader(path_to_file: str) -> list:
+def excel_file_reader(path_to_file: str = '../data/transactions_excel.xlsx') -> list:
     """Функция для считывания финансовых операций из Excel, принимает путь к файлу Excel в качестве аргумента.
     Возвращает список словарей с транзакциями."""
 
