@@ -2,14 +2,14 @@ import json
 import logging
 
 logger = logging.getLogger('utils')
-file_handler = logging.FileHandler('./logs/utils.log', encoding='utf-8', mode='w')
+file_handler = logging.FileHandler('../logs/utils.log', encoding='utf-8', mode='w')
 file_formatter = logging.Formatter('%(asctime)s %(name)s %(levelname)s: %(message)s')
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 logger.setLevel(logging.DEBUG)
 
 
-def get_dict_transactions(path_to_file: str = './data/operations.json') -> list:
+def get_dict_transactions(path_to_file: str = '../data/operations.json') -> list:
     """Принимает на вход путь до JSON-файла и возвращает список словарей с данными о финансовых транзакциях.
        Если файл пустой, содержит не список или не найден, функция возвращает пустой список."""
     try:
