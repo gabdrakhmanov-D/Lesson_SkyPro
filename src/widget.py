@@ -5,16 +5,18 @@ from src import masks
 
 def mask_account_card(incoming_data: str) -> str:
     """Функция, которая принимает номер счета или карты и возвращает строку с замаскированным номером."""
-    tmp_list = incoming_data.split()
-    if not any(symbols.isalpha() for symbols in tmp_list[:-1]) and not any(
-        symbols.isdigit() for symbols in tmp_list[-1]
-    ):  # проверяет, состоит ли строка из букв и цифр
-        raise ValueError("Некорректный номер карты или счета")
-    card_number = tmp_list[-1]
-    if "Счет" in tmp_list[0]:
-        return f"{' '.join(tmp_list[0:-1])} {masks.get_mask_account(card_number)}"
-    else:
-        return f"{' '.join(tmp_list[0:-1])} {masks.get_mask_card_number(card_number)}"
+    if incoming_data:
+        tmp_list = incoming_data.split()
+        if not any(symbols.isalpha() for symbols in tmp_list[:-1]) and not any(
+            symbols.isdigit() for symbols in tmp_list[-1]
+        ):  # проверяет, состоит ли строка из букв и цифр
+            raise ValueError("Некорректный номер карты или счета")
+        card_number = tmp_list[-1]
+        if "Счет" in tmp_list[0]:
+            return f"{' '.join(tmp_list[0:-1])} {masks.get_mask_account(card_number)}"
+        else:
+            return f"{' '.join(tmp_list[0:-1])} {masks.get_mask_card_number(card_number)}"
+    return '+-----+'
 
 
 def get_date(date: str) -> str:

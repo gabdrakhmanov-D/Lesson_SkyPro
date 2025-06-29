@@ -49,8 +49,8 @@ def category_counter(list_of_dict: list[dict], list_of_category: list) -> dict:
         cat_count_logger.info('Старт работы функции. Переборка и сравнение значений списка категорий')
         count_list = []
         for dict_transact in list_of_dict:
-                if dict_transact.get("description") in list_of_category:
-                    count_list.append(dict_transact.get("description"))
+            if dict_transact.get("description") in list_of_category:
+                count_list.append(dict_transact.get("description"))
         counted = Counter(count_list)
         cat_count_logger.info('Подсчет прошел успешно. Возврат словаря значений')
         return counted
