@@ -2,17 +2,17 @@ from typing import Any, Generator
 
 
 def filter_by_currency(
-    list_transact: list[dict], currency
+    list_transact: list[dict], currency: str, file_type: str = 'json'
 ) -> Generator[dict]:
     """Функция возвращает итератор, который поочередно выдает транзакции,
     где валюта операции соответствует заданной (например, USD)."""
+    if file_type != 'json':
+        return (
+        dict_in_list_transact for dict_in_list_transact in list_transact
+            if dict_in_list_transact.get('currency_code') == currency)
     return (
-        dict_in_list_transact
-        if (dict_in_list_transact.get("operationAmount")
-            and dict_in_list_transact["operationAmount"]["currency"]["code"] == currency)
-        else dict_in_list_transact for dict_in_list_transact in list_transact
-        if dict_in_list_transact.get('currency_code') == currency)
-
+        dict_in_list_transact for dict_in_list_transact in list_transact
+            if dict_in_list_transact["operationAmount"]["currency"]["code"] == currency)
 
 
 def transaction_descriptions(list_transact: list[dict[str, int | str]]):

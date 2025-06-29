@@ -28,27 +28,30 @@ def select_file() -> list:
         if select_file == '1':
             logger_file.info('Выбран пункт 1, запрос отправлен get_dict_transactions')
             print('Для обработки выбран JSON-файл.')
+            file_type = 'json'
             list_transactions = get_dict_transactions()
         elif select_file == '2':
             logger_file.info('Выбран пункт 2, запрос отправлен csv_file_reader')
             print('Для обработки выбран CSV-файл.')
+            file_type = 'csv'
             list_transactions = csv_file_reader()
         elif select_file == '3':
             logger_file.info('Выбран пункт 3, запрос отправлен в excel_file_reader')
             print('Для обработки выбран XLSX-файл.')
+            file_type = 'xlsx'
             list_transactions = excel_file_reader()
         else:
             logger_file.warning('Выбран неверный пункт в меню')
             print('Выбран неверный пункт в меню')
     logger_file.info('Возврат списка транзакций')
-    return list_transactions
+    return list_transactions, file_type
 
 
-def select_filter() -> list:
+def select_filter(list_transact) -> list:
     logger_filter.info('Старт работы функции')
-    list_transact = select_file()
     if not list_transact:
         logger_filter.error('Получен пустой список, возврат пустого списка!')
+        return []
     else:
         filter_transact = None
         while filter_transact not in ['EXECUTED', 'CANCELED', 'PENDING']:
@@ -63,14 +66,13 @@ def select_filter() -> list:
                 print(f'Статус операции {filter_transact} недоступен.')
         logger_filter.info('Возврат списка транзакций')
         return list_transactions
-    return []
 
 
-def sort_by_data():
-    list_transact = select_filter()
+def sort_by_data(list_transact):
     logger_sort_by_data.info('Старт работы функции')
     if not list_transact:
         logger_sort_by_data.error('Получен пустой список, возврат пустого списка!')
+        return []
     else:
         date_answer = None
         while date_answer not in ['да', 'нет']:
@@ -97,13 +99,13 @@ def sort_by_data():
                 print('\nВы ввели некорректное значение, повторите снова\n')
         logger_sort_by_data.info('Успешный возврат списка транзакций')
         return list_transactions
-    return []
 
-def filter_rub_transact():
+def filter_rub_transact(list_transact, file_type):
     logger_rub_transact.info('Старт работы функции')
-    list_transact = sort_by_data()
+    logger_rub_transact.info(f'В фильтр валюты передан файл: {file_type}')
     if not list_transact:
         logger_rub_transact.error('Получен пустой список, возврат пустого списка!')
+        return []
     else:
         transact_answer = None
         while transact_answer not in ['да', 'нет']:
@@ -111,7 +113,8 @@ def filter_rub_transact():
         if transact_answer == 'да':
             logger_rub_transact.info('Пользователь выбрал только рублевые транзакции')
             rub_transact = 'RUB'
-            list_transactions = filter_by_currency(list_transact, rub_transact)
+            list_transactions = filter_by_currency(list_transact, rub_transact, file_type)
+            # print(next(list_transactions))
         elif transact_answer == 'нет':
             logger_rub_transact.info('Пользователь не выбрал рублевые транзакции')
             list_transactions = list_transact
@@ -120,13 +123,13 @@ def filter_rub_transact():
             print('\nВы ввели некорректное значение, повторите снова\n')
         logger_rub_transact.info('Успешный возврат списка транзакций')
         return list_transactions
-    return []
 
-def filter_by_pattern():
+
+def filter_by_pattern(list_transact):
     logger_by_pattern.info('Старт работы функции')
-    list_transact = filter_rub_transact()
     if not list_transact:
         logger_by_pattern.error('Получен пустой список, возврат пустого списка!')
+        return []
     else:
         filter_word_answer = None
         while filter_word_answer not in ['да', 'нет']:
@@ -144,33 +147,38 @@ def filter_by_pattern():
                 print('\nВы ввели некорректное значение, повторите снова\n')
         logger_by_pattern.info('Успешный возврат списка транзакций')
         return list_transactions
-    return []
 
 def main():
     logger_main.info('Старт работы функции')
-    list_transact = filter_by_pattern()
-    if not list_transact:
+    list_transactions, file_type = select_file()
+    list_transactions = select_filter(list_transactions)
+    list_transactions = sort_by_data(list_transactions)
+    list_transactions = filter_rub_transact(list_transactions, file_type)
+    list_transactions = list(filter_by_pattern(list_transactions))
+
+    if not list_transactions:
         logger_main.error('Получен пустой список, возврат пустого списка!')
         print('Не найдено ни одной транзакции, подходящей под ваши условия фильтрации')
         return
-
     logger_main.info('Получен список транзакций')
     print('\nРаспечатываю итоговый список транзакций...\n')
 
     print(f'Всего банковских операций в выборке: ')
 
     set_descriptions = set()
-    for description in list_transact:
+    for description in list_transactions:
         set_descriptions.add(description.get('description'))
     logger_main.info(f'Получен список категорий: {list(set_descriptions)}, передача его в category_counter')
-    for key, value in category_counter(list_transact, list(set_descriptions)).items():
+
+    count_dict = category_counter(list_transactions, list(set_descriptions))
+    for key, value in count_dict.items():
         print(f'{key}: {value}')
     print()
 
-    for item in list_transact:
+    for item in list_transactions:
         print('-'*45)
         print(f'{get_date(item['date'])} {item.get('description')}')
-        if item.get('from') or item.get('from') != 0:
+        if item.get('from') and item.get('from') != 0:
                 print(f'{mask_account_card(item.get('from'))} -> {mask_account_card(item.get('to'))}')
         else:
             print(f'{mask_account_card(item.get('to'))}')
@@ -179,6 +187,7 @@ def main():
         else:
             print(f'Сумма: {item['amount']} {item['currency_code']}')
         print('*'*45,'\n')
+    logger_main.info('Завершение работы программы')
 
 if __name__ == '__main__':
     main()
