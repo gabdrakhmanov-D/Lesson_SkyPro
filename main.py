@@ -1,8 +1,10 @@
 from src.file_reader import csv_file_reader, excel_file_reader
-from src.find_transact import get_required_dictionary
+from src.find_transact import get_required_dictionary, category_counter
 from src.generators import filter_by_currency
+from src.masks import get_mask_account
 from src.processing import filter_by_state, sort_by_date
 from src.utils import get_dict_transactions
+from src.widget import get_date, mask_account_card
 
 if __name__ == '__main__':
     select_file = False
@@ -48,8 +50,8 @@ if __name__ == '__main__':
                     sorting_dict_by_data = sort_by_date(filtered_dict, True)
                 else:
                     print('\nВы ввели некорректное значение, повторите снова\n')
-        # elif date_answer == 'нет':
-        #     date_sort = False
+        elif date_answer == 'нет':
+            sorting_dict_by_data =filtered_dict
         else:
             print('\nВы ввели некорректное значение, повторите снова\n')
 
@@ -72,8 +74,33 @@ if __name__ == '__main__':
             pattern = input('Введите нужное слово: ')
             filtered_dict_by_pattern = get_required_dictionary(dict_by_currency, pattern)
         elif filter_word_answer == 'нет':
-            pattern = ''
+            filtered_dict_by_pattern = dict_by_currency
         else:
             print('\nВы ввели некорректное значение, повторите снова\n')
-    print('Распечатываю итоговый список транзакций...')
-    print(filtered_dict_by_pattern)
+
+    print('\nРаспечатываю итоговый список транзакций...\n')
+
+    if not filtered_dict_by_pattern:
+        print('Не найдено ни одной транзакции, подходящей под ваши условия фильтрации')
+
+    print(f'Всего банковских операций в выборке: ')
+
+    set_descriptions = set()
+    for description in filtered_dict_by_pattern:
+        set_descriptions.add(description.get('description'))
+    for key, value in category_counter(filtered_dict_by_pattern, list(set_descriptions)).items():
+        print(f'{key}: {value}')
+    print()
+
+    for item in filtered_dict_by_pattern:
+        print('-'*45)
+        print(f'{get_date(item['date'])} {item.get('description')}')
+        if item.get('from'):
+                print(f'{mask_account_card(item.get('from'))} -> {mask_account_card(item.get('to'))}')
+        else:
+            print(f'{mask_account_card(item.get('to'))}')
+        if item.get('operationAmount'):
+            print(f'Сумма: {item['operationAmount']['amount']} {item['operationAmount']['currency']['code']}')
+        else:
+            print(f'Сумма: {item['amount']} {item['currency_code']}')
+        print('*'*45,'\n')

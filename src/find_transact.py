@@ -2,9 +2,11 @@ import logging
 import re
 from collections import Counter
 
+from src.utils import get_dict_transactions
+
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    filename='./logs/find_transact.log',
+                    filename='../logs/find_transact.log',
                     filemode='w',
                     encoding='utf-8')
 get_dict_logger = logging.getLogger('get_req_dict')
@@ -25,12 +27,11 @@ def get_required_dictionary(list_of_dict: list[dict], pattern: str) -> list[dict
         matches = []
         get_dict_logger.info('Перебор словарей из списка транзакций')
         for dict_transact in list_of_dict:
-            try:
+            if dict_transact.get("description"):
                 if re.search(search_string, dict_transact.get("description").lower()):
                     matches.append(dict_transact)
-            except Exception as ex:
-                get_dict_logger.error(f'Ошибка в ключе поиска: {ex}')
-                continue
+            else:
+                get_dict_logger.warning(f'Нет ключа "description" в словаре {dict_transact}')
         get_dict_logger.info('Поиск прошел успешно. Возврат списка значений')
         return matches
     get_dict_logger.error('Получен пустой список. Возврат пустого списка')
@@ -46,17 +47,15 @@ def category_counter(list_of_dict: list[dict], list_of_category: list) -> dict:
         cat_count_logger.error('Параметр "Список категорий операций" не является списком!')
         return {}
     elif list_of_dict:
-        cat_count_logger.info('Старт работы функции. Переборка и сравнений значений списка категорий')
+        cat_count_logger.info('Старт работы функции. Переборка и сравнение значений списка категорий')
         count_list = []
         for dict_transact in list_of_dict:
-            try:
                 if dict_transact.get("description") in list_of_category:
                     count_list.append(dict_transact.get("description"))
-            except Exception as ex:
-                get_dict_logger.error(f'Ошибка в ключе поиска: {ex}')
-                continue
         counted = Counter(count_list)
         cat_count_logger.info('Подсчет прошел успешно. Возврат словаря значений')
         return counted
     cat_count_logger.error('Получен пустой список. Возврат пустого словаря')
     return {}
+
+print(get_required_dictionary(get_dict_transactions(), 'Открытие вклада'))
