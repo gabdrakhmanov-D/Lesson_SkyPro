@@ -3,7 +3,7 @@ import logging
 
 logger = logging.getLogger('utils')
 file_handler = logging.FileHandler('D:/Pyton/package-jura_neurolink/logs/utils.log', encoding='utf-8', mode='w')
-file_formatter = logging.Formatter('%(asctime)s %(name)s %(levelname)s: %(message)s')
+file_formatter = logging.Formatter('%(asctime)s %(name)s %(funcName)s %(levelname)s: %(message)s')
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 logger.setLevel(logging.DEBUG)

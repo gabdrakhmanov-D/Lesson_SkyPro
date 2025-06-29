@@ -6,7 +6,7 @@ def csv_file_reader(path_to_file: str = 'D:/Pyton/package-jura_neurolink/data/tr
     Возвращает список словарей с транзакциями."""
 
     try:
-        csv_df = pd.read_csv(path_to_file, delimiter=';')
+        csv_df = pd.read_csv(path_to_file, delimiter=';').fillna(False)
         return csv_df.to_dict('records')
     except Exception:
         return []
@@ -17,7 +17,7 @@ def excel_file_reader(path_to_file: str = 'D:/Pyton/package-jura_neurolink/data/
     Возвращает список словарей с транзакциями."""
 
     try:
-        excel_df = pd.read_excel(path_to_file)
+        excel_df = pd.read_excel(path_to_file).fillna(False)
         return excel_df.to_dict('records')
     except Exception:
         return []

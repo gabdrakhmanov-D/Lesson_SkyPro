@@ -10,7 +10,6 @@ def mask_account_card(incoming_data: str) -> str:
         symbols.isdigit() for symbols in tmp_list[-1]
     ):  # проверяет, состоит ли строка из букв и цифр
         raise ValueError("Некорректный номер карты или счета")
-
     card_number = tmp_list[-1]
     if "Счет" in tmp_list[0]:
         return f"{' '.join(tmp_list[0:-1])} {masks.get_mask_account(card_number)}"
