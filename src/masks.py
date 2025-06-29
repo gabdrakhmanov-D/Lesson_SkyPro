@@ -1,7 +1,7 @@
 import logging
 
 logger = logging.getLogger('mask')
-file_handler = logging.FileHandler('./logs/masks.log', encoding='utf-8', mode='w')
+file_handler = logging.FileHandler('D:/Pyton/package-jura_neurolink/logs/masks.log', encoding='utf-8', mode='w')
 file_formatter = logging.Formatter('%(asctime)s %(name)s %(funcName)s %(levelname)s: %(message)s')
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)

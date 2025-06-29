@@ -2,11 +2,10 @@ import logging
 import re
 from collections import Counter
 
-from src.utils import get_dict_transactions
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    filename='../logs/find_transact.log',
+                    filename='D:/Pyton/package-jura_neurolink/logs/find_transact.log',
                     filemode='w',
                     encoding='utf-8')
 get_dict_logger = logging.getLogger('get_req_dict')
@@ -57,5 +56,3 @@ def category_counter(list_of_dict: list[dict], list_of_category: list) -> dict:
         return counted
     cat_count_logger.error('Получен пустой список. Возврат пустого словаря')
     return {}
-
-print(get_required_dictionary(get_dict_transactions(), 'Открытие вклада'))
