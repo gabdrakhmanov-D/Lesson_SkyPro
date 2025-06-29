@@ -1,3 +1,6 @@
+from src.utils import get_dict_transactions
+
+
 def filter_by_state(
     list_dict: list[dict], state="EXECUTED"
 ) -> list[dict]:
@@ -5,7 +8,7 @@ def filter_by_state(
     содержащий только те словари, у которых ключ state соответствует указанному значению
     """
     return [
-        dict_in_list for dict_in_list in list_dict if dict_in_list["state"] == state
+        dict_in_list for dict_in_list in list_dict if dict_in_list.get('state') == state
     ]
 
 
