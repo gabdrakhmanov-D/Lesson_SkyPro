@@ -8,9 +8,11 @@ def filter_by_currency(
     где валюта операции соответствует заданной (например, USD)."""
     return (
         dict_in_list_transact
-        for dict_in_list_transact in list_transact
-        if dict_in_list_transact["operationAmount"]["currency"]["code"] == currency
-    )
+        if (dict_in_list_transact.get("operationAmount")
+            and dict_in_list_transact["operationAmount"]["currency"]["code"] == currency)
+        else dict_in_list_transact for dict_in_list_transact in list_transact
+        if dict_in_list_transact.get('currency_code') == currency)
+
 
 
 def transaction_descriptions(list_transact: list[dict[str, int | str]]):
