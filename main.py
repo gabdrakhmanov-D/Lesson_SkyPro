@@ -14,157 +14,195 @@ logger_rub_transact = logging.getLogger('rub_transact')
 logger_by_pattern = logging.getLogger('filter_by_pattern')
 logger_main = logging.getLogger('main')
 
-def select_file() -> list:
+def select_file() -> str:
+    """Функция, запрашивающая из какого файла получить информацию о транзакциях. Возвращает тип файла."""
+
     logger_file.info('Старт работы функции')
-    select_file = False
-    while select_file not in ['1', '2', '3']:
-        select_file = str(input(
+    selected_file = ''
+    while selected_file not in ['1', '2', '3']:
+        selected_file = str(input(
             'Привет! Добро пожаловать в программу работы'
             'с банковскими транзакциями.Выберите необходимый пункт меню:\n'
             '1. Получить информацию о транзакциях из JSON-файла\n'
             '2. Получить информацию о транзакциях из CSV-файла\n'
             '3. Получить информацию о транзакциях из XLSX-файла\n'))
 
-        if select_file == '1':
-            logger_file.info('Выбран пункт 1, запрос отправлен get_dict_transactions')
+        if selected_file == '1':
+            logger_file.info('Выбран пункт 1')
             print('Для обработки выбран JSON-файл.')
-            file_type = 'json'
-            list_transactions = get_dict_transactions()
-        elif select_file == '2':
-            logger_file.info('Выбран пункт 2, запрос отправлен csv_file_reader')
+            return 'json'
+        elif selected_file == '2':
+            logger_file.info('Выбран пункт 2')
             print('Для обработки выбран CSV-файл.')
-            file_type = 'csv'
-            list_transactions = csv_file_reader()
-        elif select_file == '3':
-            logger_file.info('Выбран пункт 3, запрос отправлен в excel_file_reader')
+            return 'csv'
+        elif selected_file == '3':
+            logger_file.info('Выбран пункт 3')
             print('Для обработки выбран XLSX-файл.')
-            file_type = 'xlsx'
-            list_transactions = excel_file_reader()
+            return 'xlsx'
         else:
             logger_file.warning('Выбран неверный пункт в меню')
-            print('Выбран неверный пункт в меню')
-    logger_file.info('Возврат списка транзакций')
-    return list_transactions, file_type
+            print('Выбран неверный пункт в меню, повторите ввод.')
+    return 'json'
 
 
-def select_filter(list_transact) -> list:
+def select_filter() -> str:
+    """Функция, запрашивает у пользователя статус по которому необходимо выполнить фильтрацию.
+    Доступные для фильтровки статусы: EXECUTED, CANCELED, PENDING"""
+
     logger_filter.info('Старт работы функции')
-    if not list_transact:
-        logger_filter.error('Получен пустой список, возврат пустого списка!')
-        return []
-    else:
-        filter_transact = None
-        while filter_transact not in ['EXECUTED', 'CANCELED', 'PENDING']:
-            filter_transact = input('\nВведите статус, по которому необходимо выполнить фильтрацию.'
-                                  'Доступные для фильтровки статусы: EXECUTED, CANCELED, PENDING\n').upper()
-            logger_filter.info(f'Пользователь ввел: {filter_transact}')
-            if filter_transact in ['EXECUTED', 'CANCELED', 'PENDING']:
-                logger_filter.info('Запрос списка транзакций у функции filter_by_state')
-                list_transactions = filter_by_state(list_transact, filter_transact)
-            else:
-                logger_filter.warning(f'Пользователь ввел некорректный фильтр: {filter_transact}')
-                print(f'Статус операции {filter_transact} недоступен.')
-        logger_filter.info('Возврат списка транзакций')
-        return list_transactions
-
-
-def sort_by_data(list_transact):
-    logger_sort_by_data.info('Старт работы функции')
-    if not list_transact:
-        logger_sort_by_data.error('Получен пустой список, возврат пустого списка!')
-        return []
-    else:
-        date_answer = None
-        while date_answer not in ['да', 'нет']:
-            date_answer = input('Отсортировать операции по дате? Да/Нет\n').lower()
-            if date_answer == 'да':
-                logger_sort_by_data.info('Пользователь выбрал Сортировку - Да')
-                sorting_answer = None
-                while sorting_answer not in ['по возрастанию', 'по убыванию', 'возрастанию', 'убыванию']:
-                    sorting_answer = input('Отсортировать по возрастанию или по убыванию?\n').lower()
-                    if sorting_answer in ['по возрастанию', 'возрастанию']:
-                        logger_sort_by_data.info('Пользователь выбрал сортировку по возрастанию')
-                        list_transactions = sort_by_date(list_transact, False)
-                    elif sorting_answer in ['по убыванию', 'убыванию']:
-                        logger_sort_by_data.info('Пользователь выбрал сортировку по убыванию')
-                        list_transactions = sort_by_date(list_transact, True)
-                    else:
-                        logger_sort_by_data.warning(f'Пользователь ввел некорректное значение: {sorting_answer}')
-                        print('\nВы ввели некорректное значение, повторите снова\n')
-            elif date_answer == 'нет':
-                logger_sort_by_data.info('Пользователь не выбрал сортировку')
-                list_transactions = list_transact
-            else:
-                logger_sort_by_data.warning(f'Пользователь ввел некорректное значение: {date_answer}')
-                print('\nВы ввели некорректное значение, повторите снова\n')
-        logger_sort_by_data.info('Успешный возврат списка транзакций')
-        return list_transactions
-
-def filter_rub_transact(list_transact, file_type):
-    logger_rub_transact.info('Старт работы функции')
-    logger_rub_transact.info(f'В фильтр валюты передан файл: {file_type}')
-    if not list_transact:
-        logger_rub_transact.error('Получен пустой список, возврат пустого списка!')
-        return []
-    else:
-        transact_answer = None
-        while transact_answer not in ['да', 'нет']:
-            transact_answer = input('Выводить только рублевые транзакции? Да/Нет\n').lower()
-        if transact_answer == 'да':
-            logger_rub_transact.info('Пользователь выбрал только рублевые транзакции')
-            rub_transact = 'RUB'
-            list_transactions = filter_by_currency(list_transact, rub_transact, file_type)
-            # print(next(list_transactions))
-        elif transact_answer == 'нет':
-            logger_rub_transact.info('Пользователь не выбрал рублевые транзакции')
-            list_transactions = list_transact
+    filter_transact = None
+    while filter_transact not in ['EXECUTED', 'CANCELED', 'PENDING']:
+        filter_transact = input('\nВведите статус, по которому необходимо выполнить фильтрацию.'
+                              'Доступные для фильтровки статусы: EXECUTED, CANCELED, PENDING\n')
+        if filter_transact.upper() in ['EXECUTED', 'CANCELED', 'PENDING']:
+            logger_filter.info(f'Возврат cтатуса фильтрации: {filter_transact}')
+            return filter_transact
         else:
-            logger_rub_transact.warning(f'Пользователь ввел некорректное значение: {transact_answer}')
+            logger_filter.warning(f'Пользователь ввел некорректный фильтр: {filter_transact}')
+            print(f'Статус операции {filter_transact} недоступен.')
+    return 'EXECUTED'
+
+
+def sort_by_data() -> tuple[bool, bool]:
+    """Функция запрашивает у пользователя сортировать по дате или нет.
+    Если да, запрашивает делать сортировку по убыванию или возрастанию"""
+
+    logger_sort_by_data.info('Старт работы функции')
+    need_sort_date = False
+    sorting_order = False
+    date_answer = None
+    while date_answer not in ['да', 'нет']:
+        date_answer = input('Отсортировать операции по дате? Да/Нет\n').lower()
+        if date_answer == 'да':
+            need_sort_date = True
+            logger_sort_by_data.info('Пользователь выбрал Сортировку - Да')
+            sorting_answer = None
+            while sorting_answer not in ['по возрастанию', 'по убыванию', 'возрастанию', 'убыванию']:
+                sorting_answer = input('Отсортировать по возрастанию или по убыванию?\n').lower()
+                if sorting_answer in ['по возрастанию', 'возрастанию']:
+                    logger_sort_by_data.info('Пользователь выбрал сортировку по возрастанию')
+                    return need_sort_date, sorting_order
+                elif sorting_answer in ['по убыванию', 'убыванию']:
+                    logger_sort_by_data.info('Пользователь выбрал сортировку по убыванию')
+                    sorting_order = True
+                    return need_sort_date, sorting_order
+                else:
+                    logger_sort_by_data.warning(f'Пользователь ввел некорректное значение: {sorting_answer}')
+                    print('\nВы ввели некорректное значение, повторите снова\n')
+        elif date_answer == 'нет':
+            logger_sort_by_data.info('Пользователь не выбрал сортировку')
+            return need_sort_date, sorting_order
+        else:
+            logger_sort_by_data.warning(f'Пользователь ввел некорректное значение: {date_answer}')
             print('\nВы ввели некорректное значение, повторите снова\n')
-        logger_rub_transact.info('Успешный возврат списка транзакций')
-        return list_transactions
+    return None
 
 
-def filter_by_pattern(list_transact):
-    logger_by_pattern.info('Старт работы функции')
-    if not list_transact:
-        logger_by_pattern.error('Получен пустой список, возврат пустого списка!')
-        return []
+def filter_rub_transact() -> bool:
+    """Функция, которая запрашивает выводить только рублевые транзакции или нет"""
+
+    logger_rub_transact.info('Старт работы функции')
+    transact_answer = None
+    while transact_answer not in ['да', 'нет']:
+        transact_answer = input('Выводить только рублевые транзакции? Да/Нет\n').lower()
+    if transact_answer == 'да':
+        logger_rub_transact.info('Пользователь выбрал только рублевые транзакции')
+        return True
+    elif transact_answer == 'нет':
+        logger_rub_transact.info('Пользователь не выбрал рублевые транзакции')
+        return False
     else:
-        filter_word_answer = None
-        while filter_word_answer not in ['да', 'нет']:
-            filter_word_answer = input(
-                'Отфильтровать список транзакций по определенному слову в описании? Да/Нет\n').lower()
-            if filter_word_answer == 'да':
-                pattern = input('Введите нужное слово: ')
-                logger_by_pattern.info(f'Пользователь выбрал фильтр по значению: {pattern}')
-                list_transactions = get_required_dictionary(list_transact, pattern)
-            elif filter_word_answer == 'нет':
-                logger_by_pattern.info('Фильтрация по словам не выбрана')
-                list_transactions = list_transact
-            else:
-                logger_by_pattern.warning(f'Пользователь ввел некорректное значение: {filter_word_answer}')
-                print('\nВы ввели некорректное значение, повторите снова\n')
-        logger_by_pattern.info('Успешный возврат списка транзакций')
-        return list_transactions
+        logger_rub_transact.warning(f'Пользователь ввел некорректное значение: {transact_answer}')
+        print('\nВы ввели некорректное значение, повторите снова\n')
+    return False
+
+
+def filter_by_pattern() -> tuple[bool, str] | tuple[bool, bool]:
+    """Функция, запрашивает необходимость фильтрации по слову. В случае положительного ответа. Запрашивает слово."""
+    logger_by_pattern.info('Старт работы функции')
+    filter_word_answer = None
+    while filter_word_answer not in ['да', 'нет']:
+        filter_word_answer = input(
+            'Отфильтровать список транзакций по определенному слову в описании? Да/Нет\n').lower()
+        if filter_word_answer == 'да':
+            pattern = input('Введите нужное слово: ')
+            logger_by_pattern.info(f'Пользователь выбрал фильтр по значению: {pattern}')
+            return True, pattern
+        elif filter_word_answer == 'нет':
+            logger_by_pattern.info('Фильтрация по словам не выбрана')
+            return False, False
+        else:
+            logger_by_pattern.warning(f'Пользователь ввел некорректное значение: {filter_word_answer}')
+            print('\nВы ввели некорректное значение, повторите снова\n')
+    return False, False
 
 def main():
+
     logger_main.info('Старт работы функции')
-    list_transactions, file_type = select_file()
-    list_transactions = select_filter(list_transactions)
-    list_transactions = sort_by_data(list_transactions)
-    list_transactions = filter_rub_transact(list_transactions, file_type)
-    list_transactions = list(filter_by_pattern(list_transactions))
+    file_type = select_file()
+    filter_status = select_filter()
+    need_sort_date, sorting_order = sort_by_data()
+    need_rub_filter = filter_rub_transact()
+    need_filter_by_pattern, pattern = filter_by_pattern()
+
+    if file_type == 'csv':
+        list_transactions = csv_file_reader()
+        if list_transactions:
+            logger_main.info('Успешно получен список транзакций csv')
+        else:
+            logger_main.error('Список транзакций csv пуст!')
+    elif file_type == 'xlsx':
+        list_transactions = excel_file_reader()
+        if list_transactions:
+            logger_main.info('Успешно получен список транзакций xlsx')
+        else:
+            logger_main.error('Список транзакций xlsx пуст!')
+    else:
+        list_transactions = get_dict_transactions()
+        if list_transactions:
+            logger_main.info('Успешно получен список транзакций json')
+        else:
+            logger_main.error('Список транзакций json пуст!')
+
+    list_transactions = filter_by_state(list_transactions, filter_status)
+    if list_transactions:
+        logger_main.info(f'Успешно получен отфильтрованный по {filter_status} список транзакций')
+    else:
+        logger_main.error('Функция filter_by_state вернула пустой список!')
+
+    if need_sort_date:
+        list_transactions = sort_by_date(list_transactions, sorting_order)
+        if list_transactions:
+            logger_main.info(f'Успешно получен отсортированный по дате список транзакций')
+        else:
+            logger_main.error('Функция sort_by_date вернула пустой список!')
+
+    if need_rub_filter:
+        list_transactions = filter_by_currency(list_transactions,'RUB', file_type)
+        if list_transactions:
+            logger_main.info('Успешно получен список транзакций отсортированный по валюте: "RUB"')
+        else:
+            logger_main.error('Функция filter_by_currency вернула пустой список!')
+
+    if need_filter_by_pattern:
+        list_transactions = get_required_dictionary(list_transactions, pattern)
+        if list_transactions:
+            logger_main.info(f'Успешно получен список транзакций отсортированный по слову: {pattern}')
+        else:
+            logger_main.error('Функция get_required_dictionary вернула пустой список!')
+
 
     if not list_transactions:
-        logger_main.error('Получен пустой список, возврат пустого списка!')
+        logger_main.error('Получен пустой список!')
         print('Не найдено ни одной транзакции, подходящей под ваши условия фильтрации')
         return
+
     logger_main.info('Получен список транзакций')
     print('\nРаспечатываю итоговый список транзакций...\n')
 
     print(f'Всего банковских операций в выборке: ')
 
+    list_transactions = list(list_transactions)
     set_descriptions = set()
     for description in list_transactions:
         set_descriptions.add(description.get('description'))
