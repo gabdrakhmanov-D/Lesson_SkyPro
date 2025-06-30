@@ -56,7 +56,7 @@ def select_filter() -> str:
                               'Доступные для фильтровки статусы: EXECUTED, CANCELED, PENDING\n')
         if filter_transact.upper() in ['EXECUTED', 'CANCELED', 'PENDING']:
             logger_filter.info(f'Возврат cтатуса фильтрации: {filter_transact}')
-            return filter_transact
+            return filter_transact.upper()
         else:
             logger_filter.warning(f'Пользователь ввел некорректный фильтр: {filter_transact}')
             print(f'Статус операции {filter_transact} недоступен.')
