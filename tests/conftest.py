@@ -120,6 +120,7 @@ def answer_json_executed():
 Сумма: 43318.34 RUB
 ********************************************* \n\n'''
 
+
 @pytest.fixture
 def example_csv_and_xlsx():
     return [
