@@ -30,19 +30,19 @@ def select_file() -> str:
         if selected_file == '1':
             logger_file.info('Выбран пункт 1')
             print('Для обработки выбран JSON-файл.')
-            return 'json'
+            file_type = 'json'
         elif selected_file == '2':
             logger_file.info('Выбран пункт 2')
             print('Для обработки выбран CSV-файл.')
-            return 'csv'
+            file_type = 'csv'
         elif selected_file == '3':
             logger_file.info('Выбран пункт 3')
             print('Для обработки выбран XLSX-файл.')
-            return 'xlsx'
+            file_type = 'xlsx'
         else:
             logger_file.warning('Выбран неверный пункт в меню')
             print('Выбран неверный пункт в меню, повторите ввод.')
-    return 'json'
+    return file_type
 
 
 def select_filter() -> str:
@@ -56,11 +56,12 @@ def select_filter() -> str:
                               'Доступные для фильтровки статусы: EXECUTED, CANCELED, PENDING\n')
         if filter_transact.upper() in ['EXECUTED', 'CANCELED', 'PENDING']:
             logger_filter.info(f'Возврат cтатуса фильтрации: {filter_transact}')
-            return filter_transact.upper()
+            answer_filter = filter_transact.upper()
+            break
         else:
             logger_filter.warning(f'Пользователь ввел некорректный фильтр: {filter_transact}')
             print(f'Статус операции {filter_transact} недоступен.')
-    return 'EXECUTED'
+    return answer_filter
 
 
 def sort_by_data() -> tuple[bool, bool]:
@@ -81,21 +82,21 @@ def sort_by_data() -> tuple[bool, bool]:
                 sorting_answer = input('Отсортировать по возрастанию или по убыванию?\n').lower()
                 if sorting_answer in ['по возрастанию', 'возрастанию']:
                     logger_sort_by_data.info('Пользователь выбрал сортировку по возрастанию')
-                    return need_sort_date, sorting_order
+                    break
                 elif sorting_answer in ['по убыванию', 'убыванию']:
                     logger_sort_by_data.info('Пользователь выбрал сортировку по убыванию')
                     sorting_order = True
-                    return need_sort_date, sorting_order
+                    break
                 else:
                     logger_sort_by_data.warning(f'Пользователь ввел некорректное значение: {sorting_answer}')
                     print('\nВы ввели некорректное значение, повторите снова\n')
         elif date_answer == 'нет':
             logger_sort_by_data.info('Пользователь не выбрал сортировку')
-            return need_sort_date, sorting_order
+            break
         else:
             logger_sort_by_data.warning(f'Пользователь ввел некорректное значение: {date_answer}')
             print('\nВы ввели некорректное значение, повторите снова\n')
-    return None
+    return need_sort_date, sorting_order
 
 
 def filter_rub_transact() -> bool:
@@ -105,36 +106,41 @@ def filter_rub_transact() -> bool:
     transact_answer = None
     while transact_answer not in ['да', 'нет']:
         transact_answer = input('Выводить только рублевые транзакции? Да/Нет\n').lower()
-    if transact_answer == 'да':
-        logger_rub_transact.info('Пользователь выбрал только рублевые транзакции')
-        return True
-    elif transact_answer == 'нет':
-        logger_rub_transact.info('Пользователь не выбрал рублевые транзакции')
-        return False
-    else:
-        logger_rub_transact.warning(f'Пользователь ввел некорректное значение: {transact_answer}')
-        print('\nВы ввели некорректное значение, повторите снова\n')
-    return False
+        if transact_answer == 'да':
+            logger_rub_transact.info('Пользователь выбрал только рублевые транзакции')
+            need_rub_transact = True
+            break
+        elif transact_answer == 'нет':
+            logger_rub_transact.info('Пользователь не выбрал рублевые транзакции')
+            need_rub_transact = False
+            break
+        else:
+            logger_rub_transact.warning(f'Пользователь ввел некорректное значение: {transact_answer}')
+            print('\nВы ввели некорректное значение, повторите снова\n')
+    return need_rub_transact
 
 
 def filter_by_pattern() -> tuple[bool, str] | tuple[bool, bool]:
     """Функция, запрашивает необходимость фильтрации по слову. В случае положительного ответа. Запрашивает слово."""
     logger_by_pattern.info('Старт работы функции')
     filter_word_answer = None
+    need_filter_by_pattern = False
+    pattern = False
     while filter_word_answer not in ['да', 'нет']:
         filter_word_answer = input(
             'Отфильтровать список транзакций по определенному слову в описании? Да/Нет\n').lower()
         if filter_word_answer == 'да':
             pattern = input('Введите нужное слово: ')
             logger_by_pattern.info(f'Пользователь выбрал фильтр по значению: {pattern}')
-            return True, pattern
+            need_filter_by_pattern = True
+            break
         elif filter_word_answer == 'нет':
             logger_by_pattern.info('Фильтрация по словам не выбрана')
-            return False, False
+            break
         else:
             logger_by_pattern.warning(f'Пользователь ввел некорректное значение: {filter_word_answer}')
             print('\nВы ввели некорректное значение, повторите снова\n')
-    return False, False
+    return need_filter_by_pattern, pattern
 
 def main():
 
