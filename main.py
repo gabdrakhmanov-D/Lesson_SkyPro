@@ -145,6 +145,7 @@ def filter_by_pattern() -> tuple[bool, str] | tuple[bool, bool]:
 
 
 def main():
+    """Функция для запуска программы"""
 
     logger_main.info('Старт работы функции')
     file_type = select_file()
