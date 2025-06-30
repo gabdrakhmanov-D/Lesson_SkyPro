@@ -1,5 +1,6 @@
 import io
-from unittest.mock import patch, Mock, MagicMock
+from unittest.mock import patch
+
 from main import main
 
 
@@ -7,7 +8,7 @@ def test_main_json(monkeypatch, examples_for_generators, answer_json_executed):
     """Тест успешного выполнения программы с файлом json"""
     captured_output = io.StringIO()
     with (patch('sys.stdout', new=captured_output),
-        patch('main.get_dict_transactions') as mock_get):
+          patch('main.get_dict_transactions') as mock_get):
         mock_get.return_value = examples_for_generators
         responses = iter(['1', 'EXECUTED', 'да', 'убыванию', 'да', 'да', 'счет'])
         monkeypatch.setattr('builtins.input', lambda _: next(responses))
@@ -59,7 +60,7 @@ def test_main_json_wrong_input(monkeypatch, examples_for_generators, incorrect_i
     with (patch('sys.stdout', new=captured_output),
           patch('main.get_dict_transactions') as mock_get):
         mock_get.return_value = examples_for_generators
-        responses = iter(['1', 'EXECUTED','д', 'да', 'у', 'убыванию', 'да', 'д', 'да', 'счет'])
+        responses = iter(['1', 'EXECUTED', 'д', 'да', 'у', 'убыванию', 'да', 'д', 'да', 'счет'])
         monkeypatch.setattr('builtins.input', lambda _: next(responses))
         main()
         assert captured_output.getvalue() == incorrect_input_words
@@ -72,7 +73,7 @@ def test_xlsx_wrong_input(monkeypatch, example_csv_and_xlsx, high_sort_xlsx):
           patch('main.excel_file_reader') as mock_get):
 
         mock_get.return_value = example_csv_and_xlsx
-        responses = iter(['5', '3', 'XECU','EXECUTED','д', 'нет', 'фы', 'нет', 'нет'])
+        responses = iter(['5', '3', 'XECU', 'EXECUTED', 'д', 'нет', 'фы', 'нет', 'нет'])
         monkeypatch.setattr('builtins.input', lambda _: next(responses))
         main()
         assert captured_output.getvalue() == high_sort_xlsx

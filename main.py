@@ -1,7 +1,7 @@
 import logging
 
 from src.file_reader import csv_file_reader, excel_file_reader
-from src.find_transact import get_required_dictionary, category_counter
+from src.find_transact import category_counter, get_required_dictionary
 from src.generators import filter_by_currency
 from src.processing import filter_by_state, sort_by_date
 from src.utils import get_dict_transactions
@@ -13,6 +13,7 @@ logger_sort_by_data = logging.getLogger('sort_by_data')
 logger_rub_transact = logging.getLogger('rub_transact')
 logger_by_pattern = logging.getLogger('filter_by_pattern')
 logger_main = logging.getLogger('main')
+
 
 def select_file() -> str:
     """Функция, запрашивающая из какого файла получить информацию о транзакциях. Возвращает тип файла."""
@@ -53,7 +54,7 @@ def select_filter() -> str:
     filter_transact = None
     while filter_transact not in ['EXECUTED', 'CANCELED', 'PENDING']:
         filter_transact = input('\nВведите статус, по которому необходимо выполнить фильтрацию.'
-                              'Доступные для фильтровки статусы: EXECUTED, CANCELED, PENDING\n')
+                                'Доступные для фильтровки статусы: EXECUTED, CANCELED, PENDING\n')
         if filter_transact.upper() in ['EXECUTED', 'CANCELED', 'PENDING']:
             logger_filter.info(f'Возврат cтатуса фильтрации: {filter_transact}')
             answer_filter = filter_transact.upper()
@@ -130,7 +131,7 @@ def filter_by_pattern() -> tuple[bool, str] | tuple[bool, bool]:
         filter_word_answer = input(
             'Отфильтровать список транзакций по определенному слову в описании? Да/Нет\n').lower()
         if filter_word_answer == 'да':
-            pattern = input('Введите нужное слово: ')
+            pattern = str(input('Введите нужное слово: '))
             logger_by_pattern.info(f'Пользователь выбрал фильтр по значению: {pattern}')
             need_filter_by_pattern = True
             break
@@ -141,6 +142,7 @@ def filter_by_pattern() -> tuple[bool, str] | tuple[bool, bool]:
             logger_by_pattern.warning(f'Пользователь ввел некорректное значение: {filter_word_answer}')
             print('\nВы ввели некорректное значение, повторите снова\n')
     return need_filter_by_pattern, pattern
+
 
 def main():
 
@@ -179,12 +181,12 @@ def main():
     if need_sort_date:
         list_transactions = sort_by_date(list_transactions, sorting_order)
         if list_transactions:
-            logger_main.info(f'Успешно получен отсортированный по дате список транзакций')
+            logger_main.info('Успешно получен отсортированный по дате список транзакций')
         else:
             logger_main.error('Функция sort_by_date вернула пустой список!')
 
     if need_rub_filter:
-        list_transactions = filter_by_currency(list_transactions,'RUB', file_type)
+        list_transactions = filter_by_currency(list_transactions, 'RUB', file_type)
         if list_transactions:
             logger_main.info('Успешно получен список транзакций отсортированный по валюте: "RUB"')
         else:
@@ -197,7 +199,6 @@ def main():
         else:
             logger_main.error('Функция get_required_dictionary вернула пустой список!')
 
-
     if not list_transactions:
         logger_main.error('Получен пустой список!')
         print('Не найдено ни одной транзакции, подходящей под ваши условия фильтрации')
@@ -205,8 +206,7 @@ def main():
 
     logger_main.info('Получен список транзакций')
     print('\nРаспечатываю итоговый список транзакций...\n')
-
-    print(f'Всего банковских операций в выборке: ')
+    print('Всего банковских операций в выборке: ')
 
     list_transactions = list(list_transactions)
     set_descriptions = set()
@@ -223,15 +223,16 @@ def main():
         print('-'*45)
         print(f'{get_date(item['date'])} {item.get('description')}')
         if item.get('from') and item.get('from') != 0:
-                print(f'{mask_account_card(item.get('from'))} -> {mask_account_card(item.get('to'))}')
+            print(f'{mask_account_card(item.get('from'))} -> {mask_account_card(item.get('to'))}')
         else:
             print(f'{mask_account_card(item.get('to'))}')
         if item.get('operationAmount'):
             print(f'Сумма: {item['operationAmount']['amount']} {item['operationAmount']['currency']['code']}')
         else:
             print(f'Сумма: {item['amount']} {item['currency_code']}')
-        print('*'*45,'\n')
+        print('*'*45, '\n')
     logger_main.info('Завершение работы программы')
+
 
 if __name__ == '__main__':
     main()
