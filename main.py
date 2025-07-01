@@ -129,7 +129,7 @@ def filter_rub_transact() -> bool:
 
 
 def filter_by_pattern() -> tuple[bool, str] | tuple[bool, bool]:
-    """Функция, запрашивает необходимость фильтрации по слову. В случае положительного ответа. Запрашивает слово."""
+    """Функция, запрашивает необходимость фильтрации по слову. В случае положительного ответа, запрашивает слово."""
     logger_by_pattern.info('Старт работы функции')
     filter_word_answer = None
     need_filter_by_pattern = False
