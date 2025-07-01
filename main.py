@@ -7,6 +7,13 @@ from src.processing import filter_by_state, sort_by_date
 from src.utils import get_dict_transactions
 from src.widget import get_date, mask_account_card
 
+
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s - %(filename)s - %(funcName)s - %(levelname)s - %(message)s',
+                    filename='D:/Pyton/package-jura_neurolink/logs/application.log',
+                    filemode='w',
+                    encoding='utf-8')
+
 logger_file = logging.getLogger('select_file')
 logger_filter = logging.getLogger('select_filter')
 logger_sort_by_data = logging.getLogger('sort_by_data')

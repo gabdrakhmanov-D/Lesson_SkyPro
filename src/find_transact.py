@@ -3,11 +3,6 @@ import re
 from collections import Counter
 
 
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(filename)s - %(funcName)s - %(levelname)s - %(message)s',
-                    filename='D:/Pyton/package-jura_neurolink/logs/application.log',
-                    filemode='w',
-                    encoding='utf-8')
 get_dict_logger = logging.getLogger('get_req_dict')
 cat_count_logger = logging.getLogger('category_counter')
 
