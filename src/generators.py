@@ -5,7 +5,8 @@ def filter_by_currency(
     list_transact: list[dict], currency: str, file_type: str = 'json'
 ) -> Generator[dict]:
     """Функция возвращает итератор, который поочередно выдает транзакции,
-    где валюта операции соответствует заданной (например, USD)."""
+    где валюта операции соответствует заданной (например, USD).
+    Принимает список словарей и тип файла из которого передан этот список."""
     if file_type != 'json':
         return (
         dict_in_list_transact for dict_in_list_transact in list_transact
